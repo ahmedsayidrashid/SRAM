@@ -97,11 +97,11 @@ data_to_sram = 0x00
 while(1):
     data_to_sram = read_ps2_keyboard()
     
-    if(data_to_sram == 0xEC): # Escape key resets the entire sram
+    if(data_to_sram == 0xEC): # Escape key resets the sram up to the program counter
         write_some_sram(0, pc, 0x00)
         pc = 0
-        print("SRAM has been reset")
-    elif(data_to_sram == 0x52): # Space key exits the program
+        print("--- SRAM has been reset ---")
+    elif(data_to_sram == 0x52): # Space key displays memory contents until the program counter
         print("--- Displaying memory contents ---")
         read_all_sram(pc)
     elif(data_to_sram == 0xCC): # Backspace (<-) key exits the program
@@ -109,6 +109,6 @@ while(1):
         time.sleep(1)
         break
     else:
-        write_sram(pc, data_to_sram) # write the raw keyboard input into the sram
-        pc += 1 #increment the address in memory to write to
-        print("Address " + str(pc) + " populated with keypress ASCII code")
+        write_sram(pc, data_to_sram) # write the scan keyboard input into the SRAM
+        pc += 1 #increment the program counter to write to the next address
+        print("Address " + str(pc) + " populated with keypress ASCII code " + str(data_to_sram))
